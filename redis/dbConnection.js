@@ -1,4 +1,6 @@
 const redis = require('redis');
+const client = redis.createClient();
+const subscriber = redis.createClient();
 const opts = {
     redis: {
         opts: {
