@@ -14,20 +14,24 @@ class AbstractQueueClass {
      * @param {*} options 
      * @param {Number} concurrency 
      * @param {Function} processor 
+     * @param {String} queueType
      */
-     async createQueue(queueName, jobType = '', opts = {}, concurrency = 1, processor) {
+     async createQueue(queueName, jobType = '', opts = {}, concurrency = 1, processor, queueType = 'producer') {
         if (!this.isQueuePresent(queueName)) {
             const newQueue = this.bull(queueName, opts);
             this.queues[queueName] = newQueue;
         }
-        if (jobType != '') {
-            this.queues[queueName].process(jobType, concurrency, processor);
-        } else {
-            this.queues[queueName].process(concurrency, processor);
+
+        if (queueType === 'producer') {
+            if (jobType != '') {
+                this.queues[queueName].process(jobType, concurrency, processor);
+            } else {
+                this.queues[queueName].process(concurrency, processor);
+            }
+            this.queues[queueName].on('failed', this.handlerFailure);
+            this.queues[queueName].on('completed', this.handlerComplete);
+            this.queues[queueName].on('stalled', this.handlerStalled);
         }
-        this.queues[queueName].on('failed', this.handlerFailure);
-        this.queues[queueName].on('completed', this.handlerComplete);
-        this.queues[queueName].on('stalled', this.handlerStalled);
     }
 
     /**

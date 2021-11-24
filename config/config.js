@@ -33,7 +33,7 @@ async function processJob(job) {
         // console.log(job.data);
         return nodemailer.getTestMessageUrl(info);
     } catch(error) {
-        console.log(errror);
+        console.log(error);
     }
 }
 

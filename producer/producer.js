@@ -4,7 +4,7 @@ const Bull = require('bull');
 const { opts } = require("../redis/dbConnection");
 const producerQueueClass = new ProducerQueueClass(Bull);
 const nameQueue = 'demo';
-producerQueueClass.createQueue(nameQueue, '', opts, 1, processJob);
+producerQueueClass.createQueue(nameQueue, '', opts, 1, processJob, 'producer');
 
 const jobOptions = {
     attempts: 3,
