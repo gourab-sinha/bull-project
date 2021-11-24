@@ -4,7 +4,7 @@ const connectQueue = (name) => new Bull(name, opts);
 
 async function handlerComplete(job) {
     console.log(job.queue.name, job.data.message);
-    job.remove();
+    // job.remove();
 }
 
 async function handlerFailure(job, error) {

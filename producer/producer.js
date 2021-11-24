@@ -1,21 +1,18 @@
-const { connectQueue } = require("../services/service");
-const nodemailer = require('nodemailer');
+const { processJob } = require("../consumer/consumer");
+const { ProducerQueueClass } = require('../classes/ProducerQueueClass');
+const Bull = require('bull');
+const { opts } = require("../redis/dbConnection");
+const producerQueueClass = new ProducerQueueClass(Bull);
+const nameQueue = 'demo';
+producerQueueClass.createQueue(nameQueue, '', opts, 1, processJob);
 
 const jobOptions = {
-    // removeOnComplete: true,
     attempts: 3,
-    // backOff: {}
 };
 
-const nameQueue = 'demo';
-const producerQueue = connectQueue(nameQueue);
 
-
-async function jobs(jobType, data) {
-    await producerQueue.add(data,{
-        ...jobOptions,
-        backOff: 3
-    });
+async function jobs(data, jobType = '',) {
+    return await producerQueueClass.addJobToQueue(nameQueue, jobOptions, jobType, data);
 }
 
 

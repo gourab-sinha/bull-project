@@ -1,8 +1,8 @@
 const { getEmailsFromQueue } = require('../consumer/consumer');
 async function getEmails(req, res, next) {
     debugger;
-    const { jobType } = req.query;
-    const data = await getEmailsFromQueue(jobType);
+    const { jobId } = req.query;
+    const data = await getEmailsFromQueue(jobId);
     res.send({
         status: 'OK', 
         data,
