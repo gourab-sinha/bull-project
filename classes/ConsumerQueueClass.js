@@ -19,7 +19,17 @@ class ConsumerQueueClass extends AbstractQueueClass {
     }
 
     async getJobDetails(queueName, jobId) {
-        return await this.queues[queueName].getJob(jobId);
+        const job = await this.queues[queueName].getJob(jobId);
+        console.log(job);
+        if (!job) {
+            return {};
+        }
+
+        const data = {
+            ...job.returnvalue
+        };
+        await this.queues[queueName].removeJobs([jobId]);
+        return data;
     }
 }
 
