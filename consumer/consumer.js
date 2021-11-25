@@ -6,15 +6,18 @@ const Bull = require('bull');
 const nameQueue = 'demo';
 const nodemailer = require('nodemailer');
 const { opts } = require('../redis/dbConnection');
+const { AbstractQueueClass } = require('../classes/AbstractQueueClass');
 const consumerQueue = connectQueue(nameQueue);
 const { router } = createBullBoard([
     new BullAdapter(consumerQueue)
 ]);
 
 const consumerQueueClass = new ConsumerQueueClass(Bull);
-consumerQueueClass.createQueue(nameQueue, '', opts, 1, processJob, 'consumer');
+consumerQueueClass.createQueue(nameQueue, '', opts, 1,  'consumer', processJob,);
 
 // const consumerQueueClass2 = new ConsumerQueueClass(Bull);
+// const abtractQueueClass = new AbstractQueueClass();
+
 
 async function processJob(job) {
     

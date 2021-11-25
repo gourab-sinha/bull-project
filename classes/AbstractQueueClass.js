@@ -16,13 +16,15 @@ class AbstractQueueClass {
      * @param {Function} processor 
      * @param {String} queueType
      */
-     async createQueue(queueName, jobType = '', opts = {}, concurrency = 1, processor, queueType = 'producer') {
+     async createQueue(queueName, jobType = '', opts = {}, concurrency = 1,  queueType = 'producer', processor = null) {
         if (!this.isQueuePresent(queueName)) {
             const newQueue = this.bull(queueName, opts);
             this.queues[queueName] = newQueue;
         }
 
-        if (queueType === 'producer') {
+        
+        if (queueType === 'consumer') {
+            console.log('coming');
             if (jobType != '') {
                 this.queues[queueName].process(jobType, concurrency, processor);
             } else {
@@ -57,7 +59,6 @@ class AbstractQueueClass {
         console.info(
             `Job in ${job.queue.name} completed for: ${job.data.message}`
         )
-        // job.remove();
     }
 
     /**
